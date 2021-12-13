@@ -1,0 +1,29 @@
+{
+  "name": "kaband",
+  "version": "1.0.0",
+  "description": "Servidor administrador kaband",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon ."
+  },
+  "author": "jalmz",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^5.16.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.0.11",
+    "multer": "^1.4.3",
+    "nodemon": "^2.0.15",
+    "streamifier": "^0.1.1",
+    "stripe": "^8.193.0",
+    "uuidv4": "^6.2.12"
+  }
+}

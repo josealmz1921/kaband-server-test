@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "grupo-kaband",
+    "private_key_id": "a6c0182830fbd136bf9a7fe7ec0e7ac60c9f4a69",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC8wlm1zXa61/TS\nQ8KORSLDa1rWEQhrPwP56FVdYF+rc4tFDQvMK7+oWBAz7o+k5Ho4IVvtrOiMNZZn\nm0B2m9K0GG7T7A1nYrfnm9iUlFiLAO+eiTiJGd+Cv6/P8Jg7xcq9p4draaVNE7p/\nhHuhq+uSbJ1MpSX5cn6RWxR7a1EvbtCZn3uIo63n/NedqvOoXpu0e2cd1cbotTzw\n33PVyQg7a62CjShAW9K3xm1mELWV0GJbJF2pFzEg1R0vGfJ6HC1VIrQ5un5xPqFv\notxAd1PDxpFENCZxC/xFWfxIkjfcAF/54q1y+UZK7jWSXlJYlMPOBlXCUE9I5Qk9\nic6P93urAgMBAAECggEANCqCIHxoE7sbLgEMA8WXlepVcFPEv97qemZ7MRMxXXDR\nTIQOfp6YmS29TJzhlfCO1nRhs43VtuoYZwnBBwaJdLxL5MWX7rqZmKi5claNId1g\nW7AQr9M2sivHqvATInHHViK2ijjoNiT9pcA3arbYo97gmg4KMKYz1HgXcQR3q2O7\nKdwdUx0IL3ap1ivO4ayOr7g814vUVyo9/5jAyxlTfkcuu87kFZn2gtJiSYf3145I\nyOinJc6dRUL0f4lX5PRV9xkokPeTkf7cMx2quMw6yMdVgppARDu4IL2Ll+Biu9Bq\nugwle8Wk4h2Wv97N7Xpq5BDPa9j/gab+iSzyIJGIAQKBgQDkmfOQx4KRowXNb8nJ\nkK4UYv9rIHX7r/4TiruMJH0lRDR47tTJNKGkNln5S8jc9kSyBen6wW85Xj5n+KQ1\n6vJkmCvZ27p5pwZrq+bS7yz8VZNrLCdXaxMCZ1cQ3Y64y+UHUTrg9RUMyLpAJyFR\n97OGI/xZwltlgTAF0rp3ee9e8QKBgQDTYfF4G6sgnaGmfhUbbbC/6HQeJCYvIwZ3\ngdxvx4rGlvOhFgPoBzteCsvQ4Zk9ff014ozuAgi3QMa9UaDTbJ2k2FcybATuCi9q\nbeKDHsLT96sIGha3+kUDal6PwFQU065AFj2EAylqswQdtZAHcQtpjvZCmvm6XVNQ\niAwDrCR8WwKBgDhp2ZaX9ZvVHEB3Xte0MZFsYNXh+9uxscTGzsOl2ZBRxZU2cyJ4\nL4+jrg58akRFLey00uoDxFvm6wWjcXqw0UKL3v5zYBBXbJkzodHaHkLjJ28iRU8o\naFeGgxDxbCAkiQ+GNz5+nMQ74OKmBW4B77ahuMu5z+47tEsrlsKXP8AxAoGAexqE\nPRWoALOsi8DL3BByqiDfVxpoXnVAc+LeFP8Zs/P/aKXgmoVzrp4M+tYXn3c7OuF4\nf7gRiV+hHmpmhhqwaGtRxNyhtluaJ5pdG02T20xWf75p0rVe8dFFxuQUU5i/1zTc\nmIAa47fjwsWVXrAYHF6Uzk9g9ocZWUIR9SWQjhcCgYEAy6Zt+YFqmfZ1Tc2I3TK3\nEVc86nb2q4Rbg2nTryJOMKznTtZYIr5B6x34adjbYS48y4QM87SdiHtAsJdWKDxa\n3IuJS2aM32VuCoh6pNnJEGX++mF2+blrljAA7MdY+OjzqLPpk0AdsUu1GQpTZzix\nQMynPUOzitmc76KVRr0wtBE=\n-----END PRIVATE KEY-----\n",
+    "client_email": "grupokaband@grupo-kaband.iam.gserviceaccount.com",
+    "client_id": "105382013991116023624",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/grupokaband%40grupo-kaband.iam.gserviceaccount.com"
+  }
+  
