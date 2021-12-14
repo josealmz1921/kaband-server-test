@@ -166,6 +166,7 @@ exports.exportarProdutos = async (req,res) => {
     try {
 
         let titulos = [
+            'id',
             'Nombre',
             'Sku',
             'Precio Compra',
@@ -240,22 +241,25 @@ exports.exportarProdutos = async (req,res) => {
             const cat = await Categorias.findById({_id:vals.categoria})
 
             ws.cell(i+2,1)
-            .string(vals.nombre)
+            .string(vals._id.toString())
             .style(styleCell);
             ws.cell(i+2,2)
-            .string(vals.sku)
+            .string(vals.nombre)
             .style(styleCell);
             ws.cell(i+2,3)
-            .string(vals.precio.toString())
+            .string(vals.sku)
             .style(styleCell);
             ws.cell(i+2,4)
-            .string(vals.precioVenta.toString())
+            .string(vals.precio.toString())
             .style(styleCell);
             ws.cell(i+2,5)
-            .string(cat.nombre)
+            .string(vals.precioVenta.toString())
             .style(styleCell);
+            ws.cell(i+2,6)
+            .string(cat.nombre)
+            .style(styleCell)
             vals.almacenes.map((almacen,index) => {
-                ws.cell(i+2,6+index)
+                ws.cell(i+2,7+index)
                 .string(almacen.cantidad.toString())
                 .style(styleCell);
             })

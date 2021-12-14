@@ -9,7 +9,7 @@ const app = express();
 conectarDB();
 
 // Hablitar express.json
-app.use(express.json({extend:true}));
+app.use(express.json({extend:true,limit: '50mb'}));
  
 // Habilitar cors
 
@@ -17,6 +17,7 @@ app.use(cors());
 
 // puerto de la app
 const PORT = process.env.PORT || 4000;
+
 
 // Importar rutas
 
@@ -32,6 +33,7 @@ app.use('/api/cotizacion',require('./routes/cotizaciones'));
 app.use('/api/reportes',require('./routes/reportes'));
 app.use('/api/paginas',require('./routes/paginas'));
 app.use('/api/carrito',require('./routes/carrito'));
+app.use('/api/inventarios',require('./routes/inventarios'));
 
 // arrancar app
 app.listen(PORT, () => {
