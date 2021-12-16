@@ -174,6 +174,40 @@ exports.obtenerProductos = async (req,res) => {
                 }
             }
         }
+
+        if(options.alto && options.ancho && options.longitud){
+
+            if(query["$and"]){
+                const altoMax = {'alto':{ $lte:options.alto}};
+                const altoMin = {'alto':{$gte:options.alto}};
+                const anchoMax = {'ancho':{$lte:options.ancho}};
+                const anchoMin = {'ancho':{$gte:options.ancho}};
+                const longitudMax = {'longitud':{$lte:options.longitud}};
+                const longitudMin = {'longitud':{$gte:options.longitud}};
+                query["$and"].push(altoMax);
+                query["$and"].push(altoMin);
+                query["$and"].push(anchoMax);
+                query["$and"].push(anchoMin);
+                query["$and"].push(longitudMax);
+                query["$and"].push(longitudMin);
+            }else{
+                query = {
+                    "$and":[]
+                }
+                const altoMax = {'alto':{ $lte:options.alto}};
+                const altoMin = {'alto':{$gte:options.alto}};
+                const anchoMax = {'ancho':{$lte:options.ancho}};
+                const anchoMin = {'ancho':{$gte:options.ancho}};
+                const longitudMax = {'longitud':{$lte:options.longitud}};
+                const longitudMin = {'longitud':{$gte:options.longitud}};
+                query["$and"].push(altoMax);
+                query["$and"].push(altoMin);
+                query["$and"].push(anchoMax);
+                query["$and"].push(anchoMin);
+                query["$and"].push(longitudMax);
+                query["$and"].push(longitudMin);
+            }
+        }
         
         const skip = (page - 1) * 25;
         const resultados = await Productos.find(query).limit(25).skip(skip);
@@ -218,7 +252,6 @@ exports.obtenerProductos = async (req,res) => {
         return res.json({productos,total});
 
     } catch (error) {
-        console.log(error);
         return res.status(400).json({msg:'Error al obtener los productos'});
     }
 }
@@ -232,7 +265,6 @@ exports.obtenerProducto = async (req,res) => {
         return res.json({producto,categoria});
 
     } catch (error) {
-        console.log(error);
         return res.status(400).json({msg:'Error al obtener el producto'});
     }
 }
@@ -365,3 +397,21 @@ exports.eliminarImagenes = async (req,res) => {
         res.status(500).json({msg:'Error al eliminar la imagen'})
     }
 } 
+
+exports.productosSimilares = async (req,res) => {
+    try {
+        
+        const {categoria,id} = req.params;
+
+        const productos = await Productos.find({"$and":[
+            {categoria:categoria},
+            {_id:{$ne:id}}
+        ]}).limit(16);
+
+        res.json({productos});
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({msg:'Ha ocurrido un error al obtener los productos'})
+    }
+}

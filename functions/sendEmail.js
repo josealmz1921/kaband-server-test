@@ -2,16 +2,17 @@ const nodemailer = require('nodemailer');
 var hbs = require('nodemailer-express-handlebars');
 
 
-exports.sendMailSell = async () => {
+exports.sendMailSell = async (productos,id,envio,total) => {
     
     const transporter = await nodemailer.createTransport({
         pool: true,
-        host:'smtp-relay.gmail.com',
-        post:587,
+        host:'mail.kabandnet.com',
+        port:587,
         secure:false,
+        service: 'gmail',
         auth:{
-            user:"joseharry1921@gmail.com",
-            pass:"ywjtbwqeikmligbl"
+            user:'contacto@kabandnet.com',
+            pass:'romeli200!!'
         },
         tls:{
             secure: false,
@@ -25,29 +26,27 @@ exports.sendMailSell = async () => {
         viewPath:'./views/'
     }));
 
+    const productosVentas = productos.map(item => {
+
+        let data = {};
+        data.cantidad = item.cantidad;
+        data.precio = (item.cantidad * item.precioVenta).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2})
+        data.nombre = item.nombre;
+
+        return data;
+
+    })
 
     const mailOptions = {
-        from:"joseharry1921@gmail.com",
-        to:'josepalmz19@gmail.com',
+        from:"contacto@grupokaband.com",
+        to:'joseharry1921@gmail.com',
         subject:"Informacion de compra",
         template:'index',
         context:{
-            idVenta:'dkfdknfdknfkd545sd',        
-            envio:(380).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2}),
-            total:(450).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2}),
-            productos: [
-                {
-                    
-                    nombre: 'Producto 1',
-                    cantidad: 5,
-                    precio: (150).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2})
-                },
-                {
-                    nombre: 'Producto 2',
-                    cantidad: 5,
-                    precio: (150).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2})
-                }
-            ]
+            idVenta:id,        
+            envio:(envio).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2}),
+            total:(total/100).toLocaleString('es-MX', {maximumFractionDigits: 2,minimumFractionDigits: 2}),
+            productos:productosVentas
         }
     }
 

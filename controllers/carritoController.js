@@ -1,6 +1,7 @@
 const Productos = require('../models/Productos');
 const VentasOnline = require('../models/VentasOnline');
 const { descontarStockOnline } = require('../functions/modificarStock');
+const { sendMailSell} = require('../functions/sendEmail');
 const Stripe = require('stripe');
 const stripe = new Stripe('sk_test_8o8PKNnNIbEFLSFhSfS2pcpu00FtSiKiLu');
 
@@ -21,6 +22,29 @@ exports.obtenerProductos = async (req,res) => {
         res.status(400).json({msg:'Ha ocurrido un error'});
     }
 
+}
+
+exports.obtenerComprar = async (req,res) => {
+  try {
+
+    let array = [];
+    req.body.map( item => {
+        const data = {_id : item};
+        array.push(data);
+    })
+    let query = { "$or":array };
+    if(array.length === 0){
+      query = {};
+      res.json(array);
+      return
+    }
+    const data = await Productos.find(query);
+    res.json(data);
+    
+  } catch (error) {
+    console.log(error);
+      res.status(400).json({msg:'Ha ocurrido un error'});
+  }
 }
 
 exports.pagarProductos = async (req,res) => {
@@ -79,7 +103,7 @@ exports.pagarProductos = async (req,res) => {
         pago.tipecard = paymentIntent.charges.data[0].payment_method_details.card.funding;
         pago.monto = amount;
 
-        nuevaVenta.id = paymentIntent.id;
+        nuevaVenta.id = payment.id;
         nuevaVenta.pago = pago;
         nuevaVenta.envio = totalCotizacion;
 
@@ -88,6 +112,8 @@ exports.pagarProductos = async (req,res) => {
         const ventaOnline = new VentasOnline(nuevaVenta);
 
         await ventaOnline.save();
+
+        await sendMailSell(productos,paymentIntent.id,totalCotizacion,amount);
 
         res.json({msg:'Se ha realizado tu compra correctamente. \n Te enviamos un correo con la informacion de tu compra'});
 

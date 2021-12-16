@@ -195,10 +195,11 @@ exports.obtenerSeccionProductosDestacados = async (req,res) => {
                 return item;
             })
         )
+
         res.json({productos});
         
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(400).json({msg:'Error al obtener las productos'})
     }
 }
