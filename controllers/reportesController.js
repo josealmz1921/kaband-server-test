@@ -395,8 +395,8 @@ exports.reporteExcelVendedores = async (req,res) => {
                             valores.concepto = item.concepto;
                             valores.cliente = index === 0 ? cliente.empresa  : '';
                             valores.sector = index === 0 ? item.sector : '';
-                            valores.montoUSD = index === 0 ? (item.divisa !== 'PESOS MXN' ? item.precio : '') : '';
-                            valores.montoMXN = index === 0 ? (item.divisa === 'PESOS MXN' ? item.precio : '') : '' ;
+                            valores.montoUSD =  (item.divisa !== 'PESOS MXN' ? item.precio : '');
+                            valores.montoMXN =  (item.divisa === 'PESOS MXN' ? item.precio : '');
                             valores.fechaPago = index === 0 ? `${new Date(item.fechaPago).toLocaleDateString('es-mx', {year: 'numeric', month: '2-digit', day: '2-digit'})} ${new Date(item.fechaPago).toLocaleTimeString('es-mx', {hour:'2-digit', minute:'2-digit', hour12: true})}` : '';
                             valores.estatus = index === 0 ? item.estatus : '' ;
                             valores.producto = index === 0 ? item.concepto : '' ;
@@ -418,10 +418,8 @@ exports.reporteExcelVendedores = async (req,res) => {
         )
 
         data.map((vals) => {
-
             vals.map((valores,index) =>{
                 Object.values(valores).map( async (val,i) => {
-                    
                     ws.cell(index+2,i+1)
                     .string(val.toString())
                     .style(styleCell);

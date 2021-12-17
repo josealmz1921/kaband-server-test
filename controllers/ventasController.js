@@ -138,7 +138,7 @@ exports.obtenerVentas = async (req,res) => {
         }  
                 
         const skip = (page - 1) * 25;
-        const resultados = await Ventas.find(query).limit(25).skip(skip).sort({fecha:-1});
+        const resultados = await Ventas.find(query).limit(25).skip(skip).sort({nota:-1});
         const total = await Ventas.find(query).count();
 
         const venta = await Promise.all(
