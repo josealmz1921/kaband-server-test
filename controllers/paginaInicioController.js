@@ -3,12 +3,107 @@ const SeccionCaracteristicas = require('../models/SeccionCaracteristicas');
 const SeccionCategoriasDestacadas = require('../models/SeccionCategoriasDestacadas');
 const SeccionProductosDestacados = require('../models/SeccionProductosDestacados');
 const SeccionSobreNosotros = require('../models/SeccionSobreNosotros');
+const SeccionDetalles = require('../models/SeccionDetalles');
 const SeccionVideo = require('../models/SeccionVideo');
 const {subirImagen} = require('../functions/subirImagen');
 const {eliminarImagen} = require('../functions/eliminarImagen');
 const Categorias = require('../models/Categorias');
 const Productos = require('../models/Productos');
 
+exports.obtenerSeccionDetalles = async (req,res) => {
+    try {
+
+        const busqueda = await SeccionDetalles.findById({_id:'61bfe779d4f2e6d765cc5a79'});
+        res.json(busqueda)
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg:'Ha ocurrido un error al obtener la informacion'})
+    }
+}
+
+exports.modificarSeccionDetalles = async (req,res) => {
+    try {
+
+        const busqueda = await SeccionDetalles.findById({_id:'61bfe779d4f2e6d765cc5a79'});
+
+        let error = '';
+        const { titulo1,titulo2,titulo3,titulo4,titulo5,texto1,texto2,categoria1,categoria2,categoria3,categoria4,categoria5 } = req.body;
+        
+        let seccion = {};
+        seccion.texto1 = texto1;
+        seccion.texto2 = texto2;
+        seccion.titulo1 = titulo1;
+        seccion.titulo2 = titulo2;
+        seccion.titulo3 = titulo3;
+        seccion.titulo4 = titulo4;
+        seccion.titulo5 = titulo5;
+        seccion.categoria1 = categoria1;
+        seccion.categoria2 = categoria2;
+        seccion.categoria3 = categoria3;
+        seccion.categoria4 = categoria4;
+        seccion.categoria5 = categoria5;
+
+
+        if(req.files['imagen1']){
+            let imagenNueva = await subirImagen(req.files['imagen1'][0]);
+            if(imagenNueva){
+                seccion.imagen1 = imagenNueva;
+                eliminarImagen(busqueda.imagen1)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 1.`;
+            }
+        }
+
+        if(req.files['imagen2']){
+            let imagenNueva = await subirImagen(req.files['imagen2'][0]);
+            if(imagenNueva){
+                seccion.imagen2 = imagenNueva;
+                eliminarImagen(busqueda.imagen2)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 2.`;
+            }
+        }
+
+        if(req.files['imagen3']){
+            let imagenNueva = await subirImagen(req.files['imagen3'][0]);
+            if(imagenNueva){
+                seccion.imagen3 = imagenNueva;
+                eliminarImagen(busqueda.imagen3)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 3.`;
+            }
+        }
+
+        if(req.files['imagen4']){
+            let imagenNueva = await subirImagen(req.files['imagen4'][0]);
+            if(imagenNueva){
+                seccion.imagen4 = imagenNueva;
+                eliminarImagen(busqueda.imagen4)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 4.`;
+            }
+        }
+
+        if(req.files['imagen5']){
+            let imagenNueva = await subirImagen(req.files['imagen5'][0]);
+            if(imagenNueva){
+                seccion.imagen5 = imagenNueva;
+                eliminarImagen(busqueda.imagen5)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 5.`;
+            }
+        }
+
+        await SeccionDetalles.findByIdAndUpdate({_id:'61bfe779d4f2e6d765cc5a79'},seccion,{new:true})
+        res.json({msg:'Seccion guardada correctamente'})
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg:'Ha ocurrido un error al modificar la seccion'})
+    }
+}
 
 exports.modificarSeccionSlider = async (req,res) => {
     try {

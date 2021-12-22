@@ -252,6 +252,7 @@ exports.obtenerProductos = async (req,res) => {
         return res.json({productos,total});
 
     } catch (error) {
+        console.log(error);
         return res.status(400).json({msg:'Error al obtener los productos'});
     }
 }

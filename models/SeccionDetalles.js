@@ -1,0 +1,62 @@
+const mongoose = require('mongoose');
+
+const SeccionDetallesSchema = mongoose.Schema({
+    imagen1:{
+        type:String
+    },
+    imagen2:{
+        type:String
+    },
+    imagen3:{
+        type:String
+    },
+    imagen4:{
+        type:String
+    },
+    imagen5:{
+        type:String
+    },
+    titulo1:{
+        type:String
+    },
+    titulo2:{
+        type:String
+    },
+    titulo3:{
+        type:String
+    },
+    titulo4:{
+        type:String
+    },
+    titulo5:{
+        type:String
+    },
+    texto1:{
+        type:String
+    },
+    texto2:{
+        type:String
+    },
+    categoria1:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+    categoria2:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+    categoria3:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+    categoria4:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+    categoria5:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+})
+
+module.exports = mongoose.model('SeccionDetalles',SeccionDetallesSchema);

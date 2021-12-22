@@ -1,5 +1,7 @@
 const Categorias = require('../models/Categorias');
 const Productos = require('../models/Productos');
+const {subirImagen} = require('../functions/subirImagen');
+const {eliminarImagen} = require('../functions/eliminarImagen');
 
 exports.crearCategoria = async (req,res) => {
 
@@ -32,6 +34,40 @@ exports.editarCategoria = async (req,res) => {
         
     } catch (error) {
         res.status(400).json({msg:'Ha ocurrido un error al editar la categoria'})
+    }
+}
+
+exports.imagenesCategoria = async (req,res) => {
+    try {
+
+        const categoria = await Categorias.findById({_id:req.body._id});
+
+        let nuevaCategoria = {};
+
+        if(req.files['imagenMenu']){
+            let imagenNueva = await subirImagen(req.files['imagenMenu'][0]);
+            if(imagenNueva){
+                nuevaCategoria.imagenMenu = imagenNueva;
+                categoria.imagenMenu ? eliminarImagen(categoria.imagenMenu) : null;
+            }
+        }
+
+        if(req.files['imagenCategoria']){
+            let imagenNueva = await subirImagen(req.files['imagenCategoria'][0]);
+            if(imagenNueva){
+                nuevaCategoria.imagen = imagenNueva;
+                categoria.imagen ? eliminarImagen(categoria.imagen) : null;
+            }
+        }
+
+        await Categorias.findByIdAndUpdate({_id:req.body._id},nuevaCategoria,{new:true});
+
+        res.json({msg:'ok'});
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg:'Ha ocurrido un error al subir las imagenes'})
     }
 }
 

@@ -18,6 +18,15 @@ const ContactoSchema = mongoose.Schema({
     },
     horarios:{
         type:String
+    },
+    facebook:{
+        type:String
+    },
+    youtube:{
+        type:String
+    },
+    instagram:{
+        type:String
     }
 })
 

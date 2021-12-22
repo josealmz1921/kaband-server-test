@@ -22,6 +22,15 @@ router.delete('/categorias/:id',paginaInicioController.eliminarSeccionCategorias
 router.get('/categorias',paginaInicioController.obtenerSeccionCategoriasDestacadas);
 router.post('/categorias',multer.single('imagen'),paginaInicioController.modificarSeccionCategoriasDestacadas);
 
+// Seccion detalles
+router.post('/detalles',multer.fields([
+  { name: 'imagen1', maxCount: 1 }, 
+  { name: 'imagen2', maxCount: 1 }, 
+  { name: 'imagen3', maxCount:1 },
+  { name: 'imagen4', maxCount:1 },
+  { name: 'imagen5', maxCount:1 }
+]),paginaInicioController.modificarSeccionDetalles);
+router.get('/detalles',paginaInicioController.obtenerSeccionDetalles);
 
 // Seccion productos
 router.get('/productos',paginaInicioController.obtenerSeccionProductosDestacados);

@@ -5,7 +5,7 @@ const Terminos = require('../models/Terminos');
 exports.editarContacto = async (req,res) => {
     try {
         
-        const { nosotros,whatsapp,telefono,email,direccion,horarios } = req.body;
+        const { nosotros,whatsapp,telefono,email,direccion,horarios,facebook,instagram,youtube } = req.body;
 
         let nuevosContactos = {};
         nuevosContactos.nosotros = nosotros;
@@ -14,6 +14,9 @@ exports.editarContacto = async (req,res) => {
         nuevosContactos.email = email;
         nuevosContactos.direccion = direccion;
         nuevosContactos.horarios = horarios;
+        nuevosContactos.facebook = facebook;
+        nuevosContactos.instagram = instagram;
+        nuevosContactos.youtube = youtube;
         const contacto = await Contacto.findByIdAndUpdate({_id:'61a6315dab5aa8958a4eecc0'},nuevosContactos,{new:true})
         res.json({contacto});
 
