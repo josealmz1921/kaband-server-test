@@ -9,7 +9,7 @@ const {eliminarImagen} = require('../functions/eliminarImagen');
 exports.crearProducto = async (req,res) => {
     try {
 
-        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,largo,ancho,alto,colores } = req.body;
+        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,accesorios } = req.body;
         let nuevoProducto = {};
         const almacenes = await Almacenes.find();
         const listadoAlamacenes = almacenes.map(almacen => {
@@ -37,6 +37,8 @@ exports.crearProducto = async (req,res) => {
         nuevoProducto.alto = alto;
         nuevoProducto.colores = colores;
         nuevoProducto.imagenes = [];
+        nuevoProducto.specs = specs;
+        nuevoProducto.accesorios = accesorios;
 
         const producto = new Productos (nuevoProducto);
         producto.save();
@@ -51,7 +53,7 @@ exports.crearProducto = async (req,res) => {
 
 exports.editarProducto = async (req,res) => {
     try {
-        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,largo,ancho,alto,colores,_id } = req.body;
+        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios } = req.body;
 
         let nuevoProducto = {};
         nuevoProducto.nombre = nombre;
@@ -65,7 +67,8 @@ exports.editarProducto = async (req,res) => {
         nuevoProducto.ancho = ancho;
         nuevoProducto.alto = alto;
         nuevoProducto.colores = colores;
-        nuevoProducto.imagenes = [];        
+        nuevoProducto.specs = specs;    
+        nuevoProducto.accesorios = accesorios;
 
         const producto = await Productos.findByIdAndUpdate({_id},nuevoProducto,{new:true});
 
@@ -349,6 +352,7 @@ exports.editarImagenes = async (req,res) => {
         const busqueda = await Productos.findById({_id});
         let imagenes = busqueda.imagenes;
         let imagenPrincipal = busqueda.img;
+        let pdf = busqueda.pdf;
         let nuevoProducto = {};
         
         if(req.files !== undefined){
@@ -371,6 +375,15 @@ exports.editarImagenes = async (req,res) => {
                     if(imagenPrincipal) eliminarImagen(imagenPrincipal);
                 }
             }
+
+            if(req.files['pdf']){
+                const imagenNueva = await subirImagen(req.files['pdf'][0]);
+                if(imagenNueva){
+                    nuevoProducto.pdf = imagenNueva;
+                    if(pdf) eliminarImagen(pdf);
+                }
+            }
+
         }
         nuevoProducto.imagenes = imagenes;
 
@@ -414,5 +427,68 @@ exports.productosSimilares = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(400).json({msg:'Ha ocurrido un error al obtener los productos'})
+    }
+}
+
+exports.imagenColores = async (req,res) => {
+    try {
+
+        const { id,imagen } = req.body;
+        
+        const producto = await Productos.findById({_id:id});
+
+        let imagenesColores = producto.imagenesColores;
+
+        const validacion = imagenesColores.filter(item => item.color === imagen.color);
+
+        const validacionColorImagen = imagenesColores.filter(item => item.imagen === imagen.imagen);
+
+        if(validacionColorImagen.length > 0){
+            imagenesColores = imagenesColores.filter(item => item.imagen !== imagen.imagen);
+        }
+
+        if(validacion.length > 0){
+            return res.status(400).json({msg:'El color seleccionado de la imagen ya esta asignado a otra imagen debes quitarlo para poder cambiarlo'});
+        }
+
+        imagenesColores = [...imagenesColores,imagen];
+
+        await Productos.findByIdAndUpdate({_id:id},{
+            $set:{
+                imagenesColores:imagenesColores
+            }
+        },{new:true});
+
+        return res.json({msg:'Cambios actualizados correctamente'});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg:'Ha ocurrido un error al asignar la imagen al color'});
+    }
+}
+
+exports.eliminarImagenColor = async (req,res) => {
+    try {
+        
+        const { id,color } = req.body;
+
+        const producto = await Productos.findById({_id:id});
+
+        let imagenesColores = producto.imagenesColores;
+
+        imagenesColores = imagenesColores.filter(item => item.color !== color);
+
+        await Productos.findByIdAndUpdate({_id:id},{
+            $set:{
+                imagenesColores:imagenesColores
+            }
+        },{new:true});
+
+        return res.json({msg:'El color ha sido quitado correctamente'});
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg:'Ha ocurrido un error al asignar la imagen al color'});
     }
 }

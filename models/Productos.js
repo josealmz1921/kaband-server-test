@@ -23,6 +23,9 @@ const ProductosSchema = mongoose.Schema({
     descripcionProducto:{
         type:String
     },
+    specs:{
+        type:String
+    },
     almacenes:{
         type:Array
     },
@@ -42,10 +45,21 @@ const ProductosSchema = mongoose.Schema({
         type:Array,
         default:[]
     },
+    imagenesColores:{
+        type:Array,
+        default:[]
+    },
     categoria:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Categoria'
     },
+    pdf:{
+        type:String,
+        default:null
+    },
+    accesorios:{
+        type:Array
+    }
 })
 
 module.exports = mongoose.model('Productos',ProductosSchema);

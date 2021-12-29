@@ -19,7 +19,9 @@ router.post('/',multer.fields([{name:'imagen'},{name:"imagenes"}]),productosCont
 router.put('/',multer.fields([{name:'imagen'},{name:"imagenes"}]),productosController.editarProducto);
 router.put('/stock',productosController.editarStock);
 router.delete('/:_id',productosController.eliminarProdcuto);
-router.put('/imagenes',multer.fields([{name:'imagen'},{name:"imagenes"}]),productosController.editarImagenes);
+router.put('/imagenes',multer.fields([{name:'imagen'},{name:"imagenes"},{name:'pdf'}]),productosController.editarImagenes);
 router.put('/eliminar',productosController.eliminarImagenes);
+router.put('/coloresImagen',productosController.imagenColores);
+router.put('/desvincularColor',productosController.eliminarImagenColor);
 
 module.exports = router;

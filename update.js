@@ -6,11 +6,7 @@ conectarDB();
 
 const updateFunction = async () => {
     await Productos.updateMany({},{$set:{
-        peso:0,
-        largo:0,
-        alto:0,
-        ancho:0,
-        imagenes:[]
+        accesorios:[]
     }})
 }
 
