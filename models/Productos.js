@@ -59,6 +59,14 @@ const ProductosSchema = mongoose.Schema({
     },
     accesorios:{
         type:Array
+    },
+    vinculados:{
+        type:Array,
+        default:[]
+    },
+    principal:{
+        type:Boolean,
+        default:false
     }
 })
 

@@ -82,9 +82,13 @@ exports.descontarStockOnline = async (productos) => {
     await Promise.all(
 
         await productos.map( async producto => {
+            
 
-            const productoFind = await Productos.findById({_id:producto._id});
+            const productoColor = producto.vinculados.find(item => item.color === producto.color);
+
+            const productoFind = await Productos.findById({_id:productoColor.id});
             const almacenDesc = productoFind.almacenes.filter(almacen => almacen.id === 0);
+            console.log(productoFind);
             const nuevaCantidadAlmacen = Number(almacenDesc[0].cantidad) - producto.cantidad;
             const almacenesProducto = productoFind.almacenes;
 
@@ -109,7 +113,7 @@ exports.descontarStockOnline = async (productos) => {
 
             nuevoMovimiento.almacenes = almacenesList;
             nuevoMovimiento.producto = productoFind.nombre;
-            nuevoMovimiento.productoId = producto._id;
+            nuevoMovimiento.productoId = productoColor.id;
             nuevoMovimiento.usuario = null;
             const movimiento = new Movimientos(nuevoMovimiento);
             await movimiento.save();
@@ -121,7 +125,9 @@ exports.descontarStockOnline = async (productos) => {
                 return almacen;
             });
 
-            await Productos.findByIdAndUpdate({_id:producto._id},{
+            console.log(nuevosAlmacenes,nuevaCantidadAlmacen);
+
+            await Productos.findByIdAndUpdate({_id:productoColor.id},{
                 $set:{
                     almacenes:nuevosAlmacenes
                 }

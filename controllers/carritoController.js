@@ -113,7 +113,7 @@ exports.pagarProductos = async (req,res) => {
 
         await ventaOnline.save();
 
-        await sendMailSell(productos,paymentIntent.id,totalCotizacion,amount);
+        // await sendMailSell(productos,paymentIntent.id,totalCotizacion,amount);
 
         res.json({msg:'Se ha realizado tu compra correctamente. \n Te enviamos un correo con la informacion de tu compra'});
 
@@ -144,6 +144,7 @@ exports.pagarProductos = async (req,res) => {
               res.status(500).send(err.message);
               break;
             default:
+              console.log(err);
               // Handle any other types of unexpected errors
               res.status(500).send('Ha ocurrido un error no se pudo realizar el pago');
               break;

@@ -172,7 +172,7 @@ exports.obtenerProductos = async (req,res) => {
                 })
                 if(cats.length > 0){
                     query = {
-                        "$or":cats
+                        "$or":cats,
                     }
                 }
             }
@@ -209,6 +209,21 @@ exports.obtenerProductos = async (req,res) => {
                 query["$and"].push(anchoMin);
                 query["$and"].push(longitudMax);
                 query["$and"].push(longitudMin);
+            }
+        }
+
+        if(options.principal){
+            if(query["$and"]){
+                query["$and"].push({
+                    principal:options.principal
+                });
+            }else{
+                query = {
+                    "$and":[]
+                }
+                query["$and"].push({
+                    principal:options.principal
+                });
             }
         }
         
@@ -266,7 +281,17 @@ exports.obtenerProducto = async (req,res) => {
         const producto = await Productos.findById({_id: req.params._id});
         const categoria = await Categorias.findById({_id:producto.categoria});
         
-        return res.json({producto,categoria});
+        const stock = await Promise.all(
+            producto.vinculados.map( async item => {
+                let data = {};
+                const prod = await Productos.findById({_id:item.id});
+                data.almacenes = prod.almacenes;
+                data.color = item.color;
+                return data;
+            })
+        )
+
+        return res.json({producto,categoria,stock});
 
     } catch (error) {
         return res.status(400).json({msg:'Error al obtener el producto'});
@@ -490,5 +515,41 @@ exports.eliminarImagenColor = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({msg:'Ha ocurrido un error al asignar la imagen al color'});
+    }
+}
+
+exports.convertirPrincipal = async (req,res) => {
+    try {
+        
+        console.log(req.body);
+
+        const producto = await Productos.findById({_id:req.body.id});
+
+        await Productos.findByIdAndUpdate({_id:req.body.id},{
+            $set:{
+                principal:!producto.principal
+            }
+        })
+
+        res.json({msg:'Actualización realizada correctamente'})
+
+    } catch (error) {
+        res.status(500).json({msg:'Error al convertir el producto en principal'});
+    }
+}
+
+exports.vincularProductos = async (req,res) => {
+    try {
+        
+        await Productos.findByIdAndUpdate({_id:req.body.id},{
+            $set:{
+                vinculados:req.body.vinculados
+            }
+        })
+
+        res.json({msg:'Vinculación realizada correctamente'});
+
+    } catch (error) {
+        res.status(500).json({msg:'Error al convertir el producto en principal'});
     }
 }

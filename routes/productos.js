@@ -23,5 +23,7 @@ router.put('/imagenes',multer.fields([{name:'imagen'},{name:"imagenes"},{name:'p
 router.put('/eliminar',productosController.eliminarImagenes);
 router.put('/coloresImagen',productosController.imagenColores);
 router.put('/desvincularColor',productosController.eliminarImagenColor);
+router.put('/principal',productosController.convertirPrincipal);
+router.put('/vincular',productosController.vincularProductos);
 
 module.exports = router;
