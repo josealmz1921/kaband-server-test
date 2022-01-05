@@ -25,6 +25,7 @@
     "nodemailer": "^6.7.2",
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemon": "^2.0.15",
+    "react-google-maps": "^9.4.5",
     "streamifier": "^0.1.1",
     "stripe": "^8.193.0",
     "uuidv4": "^6.2.12"

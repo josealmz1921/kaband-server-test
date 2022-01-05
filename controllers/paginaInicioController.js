@@ -28,7 +28,7 @@ exports.modificarSeccionDetalles = async (req,res) => {
         const busqueda = await SeccionDetalles.findById({_id:'61bfe779d4f2e6d765cc5a79'});
 
         let error = '';
-        const { titulo1,titulo2,titulo3,titulo4,titulo5,texto1,texto2,categoria1,categoria2,categoria3,categoria4,categoria5 } = req.body;
+        const { titulo1,titulo2,titulo3,titulo4,titulo5,titulo6,texto1,texto2,categoria1,categoria2,categoria3,categoria4,categoria5,categoria6 } = req.body;
         
         let seccion = {};
         seccion.texto1 = texto1;
@@ -38,11 +38,13 @@ exports.modificarSeccionDetalles = async (req,res) => {
         seccion.titulo3 = titulo3;
         seccion.titulo4 = titulo4;
         seccion.titulo5 = titulo5;
+        seccion.titulo6 = titulo6;
         seccion.categoria1 = categoria1;
         seccion.categoria2 = categoria2;
         seccion.categoria3 = categoria3;
         seccion.categoria4 = categoria4;
         seccion.categoria5 = categoria5;
+        seccion.categoria5 = categoria6;
 
 
         if(req.files['imagen1']){
@@ -92,6 +94,16 @@ exports.modificarSeccionDetalles = async (req,res) => {
                 eliminarImagen(busqueda.imagen5)
             }else{
                 error = `${error} \n No se ha podido subir la imagen 5.`;
+            }
+        }
+
+        if(req.files['imagen6']){
+            let imagenNueva = await subirImagen(req.files['imagen6'][0]);
+            if(imagenNueva){
+                seccion.imagen6 = imagenNueva;
+                eliminarImagen(busqueda.imagen6)
+            }else{
+                error = `${error} \n No se ha podido subir la imagen 6.`;
             }
         }
 

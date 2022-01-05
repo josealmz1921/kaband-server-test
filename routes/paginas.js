@@ -28,7 +28,8 @@ router.post('/detalles',multer.fields([
   { name: 'imagen2', maxCount: 1 }, 
   { name: 'imagen3', maxCount:1 },
   { name: 'imagen4', maxCount:1 },
-  { name: 'imagen5', maxCount:1 }
+  { name: 'imagen5', maxCount:1 },
+  { name: 'imagen6', maxCount:1 }
 ]),paginaInicioController.modificarSeccionDetalles);
 router.get('/detalles',paginaInicioController.obtenerSeccionDetalles);
 

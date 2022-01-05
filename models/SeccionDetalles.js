@@ -16,6 +16,9 @@ const SeccionDetallesSchema = mongoose.Schema({
     imagen5:{
         type:String
     },
+    imagen6:{
+        type:String
+    },
     titulo1:{
         type:String
     },
@@ -29,6 +32,9 @@ const SeccionDetallesSchema = mongoose.Schema({
         type:String
     },
     titulo5:{
+        type:String
+    },
+    titulo6:{
         type:String
     },
     texto1:{
@@ -54,6 +60,10 @@ const SeccionDetallesSchema = mongoose.Schema({
         ref:'Categoria'
     },
     categoria5:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Categoria'
+    },
+    categoria6:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Categoria'
     },
