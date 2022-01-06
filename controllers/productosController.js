@@ -54,7 +54,7 @@ exports.crearProducto = async (req,res) => {
 
 exports.editarProducto = async (req,res) => {
     try {
-        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios, } = req.body;
+        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios,descripcionCorta } = req.body;
 
         let nuevoProducto = {};
         nuevoProducto.nombre = nombre;
