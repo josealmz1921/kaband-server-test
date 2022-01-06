@@ -67,6 +67,9 @@ const ProductosSchema = mongoose.Schema({
     principal:{
         type:Boolean,
         default:false
+    },
+    descripcionCorta:{
+        type:String
     }
 })
 

@@ -173,7 +173,7 @@ exports.obtenerCategoriasPagina = async (req,res) => {
                 const cats = resultado.filter( cat => cat.padre == set._id );        
                 await Promise.all(
                     cats.map( async cat => {
-                        const cant = await Productos.find({categoria:cat._id}).count();
+                        const cant = await Productos.find({categoria:cat._id,principal:true}).count();
                         cantidad = cant + cantidad;
                     })
                 );
@@ -208,7 +208,7 @@ exports.obtenerCategoriasPaginaHijos = async (req,res) => {
 
                 let cantidad = 0;
                 const set = JSON.parse(JSON.stringify(item));
-                set.cantidad = await Productos.find({categoria:item._id}).count();
+                set.cantidad = await Productos.find({categoria:item._id,principal:true}).count();
                 if(set.padre === null) return null;
                 return set;
 

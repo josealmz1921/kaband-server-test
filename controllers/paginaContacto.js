@@ -1,6 +1,7 @@
 const Contacto = require('../models/Contacto');
 const Privacidad = require('../models/Privacidad');
 const Terminos = require('../models/Terminos');
+const { sendMailContacto } = require('../functions/sendEmail')
 
 exports.editarContacto = async (req,res) => {
     try {
@@ -93,5 +94,17 @@ exports.obtenerTerminos = async (req,res) => {
         
     } catch (error) {
         res.status(500).json({msg:'Ha ocurrido un error al obtener la informacion de contacto'})
+    }
+}
+
+exports.enviarContacto = async (req,res) => {
+    try {
+
+        await sendMailContacto(req.body);
+
+        res.json({msg:'Formulario enviado correctamente'})
+        
+    } catch (error) {
+        res.status(500).json({msg:'Ha ocurrido un error al eviar el formulario'})
     }
 }

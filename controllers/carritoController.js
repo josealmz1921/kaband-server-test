@@ -113,7 +113,7 @@ exports.pagarProductos = async (req,res) => {
 
         await ventaOnline.save();
 
-        // await sendMailSell(productos,paymentIntent.id,totalCotizacion,amount);
+        await sendMailSell(productos,paymentIntent.id,totalCotizacion,amount,correo);
 
         res.json({msg:'Se ha realizado tu compra correctamente. \n Te enviamos un correo con la informacion de tu compra'});
 

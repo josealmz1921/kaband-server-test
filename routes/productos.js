@@ -10,6 +10,7 @@ const multer = Multer({
   }
 });
 
+router.get('/buscar/:name',productosController.obtenerProductosBuscador);
 router.get('/similares/:categoria/:id',productosController.productosSimilares);
 router.get('/producto/:_id',productosController.obtenerProducto);
 router.get('/:page/:name',productosController.obtenerProductos);

@@ -9,7 +9,7 @@ const {eliminarImagen} = require('../functions/eliminarImagen');
 exports.crearProducto = async (req,res) => {
     try {
 
-        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,accesorios } = req.body;
+        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,accesorios,descripcionCorta } = req.body;
         let nuevoProducto = {};
         const almacenes = await Almacenes.find();
         const listadoAlamacenes = almacenes.map(almacen => {
@@ -39,6 +39,7 @@ exports.crearProducto = async (req,res) => {
         nuevoProducto.imagenes = [];
         nuevoProducto.specs = specs;
         nuevoProducto.accesorios = accesorios;
+        nuevoProducto.descripcionCorta = descripcionCorta;
 
         const producto = new Productos (nuevoProducto);
         producto.save();
@@ -53,7 +54,7 @@ exports.crearProducto = async (req,res) => {
 
 exports.editarProducto = async (req,res) => {
     try {
-        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios } = req.body;
+        const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios, } = req.body;
 
         let nuevoProducto = {};
         nuevoProducto.nombre = nombre;
@@ -69,6 +70,7 @@ exports.editarProducto = async (req,res) => {
         nuevoProducto.colores = colores;
         nuevoProducto.specs = specs;    
         nuevoProducto.accesorios = accesorios;
+        nuevoProducto.descripcionCorta = descripcionCorta;
 
         const producto = await Productos.findByIdAndUpdate({_id},nuevoProducto,{new:true});
 
@@ -145,8 +147,18 @@ exports.obtenerProductos = async (req,res) => {
 
         let query = {}
 
+        let cantidad = 25;
+
+        if(options.cantidad){
+            cantidad = options.cantidad
+        }
+
         if(!options.busqueda && options.categoria){
-            query = {'categoria':options.categoria}
+            query = {
+                "$and":[
+                    {'categoria':options.categoria}
+                ]
+            }
         }
 
         if(options.busqueda && options.categoria){
@@ -159,7 +171,11 @@ exports.obtenerProductos = async (req,res) => {
         }
 
         if(options.busqueda && !options.categoria){
-            query = {'nombre':{ $regex: options.busqueda, $options:'i' }}
+            query = {
+                "$and":[
+                    {'nombre':{ $regex: options.busqueda, $options:'i' }}
+                ]
+            }
         }
 
         if(options.paginas){
@@ -227,8 +243,8 @@ exports.obtenerProductos = async (req,res) => {
             }
         }
         
-        const skip = (page - 1) * 25;
-        const resultados = await Productos.find(query).limit(25).skip(skip);
+        const skip = (page - 1) * cantidad;
+        const resultados = await Productos.find(query).limit(cantidad).skip(skip);
         const total = await Productos.find(query).count();
 
         const productos = await Promise.all(
@@ -268,6 +284,36 @@ exports.obtenerProductos = async (req,res) => {
         )
 
         return res.json({productos,total});
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({msg:'Error al obtener los productos'});
+    }
+}
+
+exports.obtenerProductosBuscador = async (req,res) => {
+    try {
+        
+        const { name } = req.params;
+
+        const options = JSON.parse(name);
+
+        let query = {}
+
+        if(options.busqueda){
+            query = {
+                "$and":[
+                    {'nombre':{ $regex: options.busqueda, $options:'i' }},
+                    {principal:options.principal}
+                ]
+            }
+        }
+        
+        console.log(query);
+
+        const productos = await Productos.find(query);
+
+        return res.json({productos});
 
     } catch (error) {
         console.log(error);
