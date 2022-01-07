@@ -3,12 +3,10 @@ const router = express.Router();
 const paginaInicioController = require('../controllers/paginaInicioController');
 const paginaNosotrosController = require('../controllers/paginaNosotrosControlles');
 const paginaContacto = require('../controllers/paginaContacto');
+const fondosController = require('../controllers/fondosController');
 const Multer = require('multer');
 const multer = Multer({
   storage: Multer.MemoryStorage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // no larger than 5mb
-  }
 });
 
 // Seccion slider
@@ -63,6 +61,7 @@ router.put('/eliminar',paginaNosotrosController.eliminarImagenes);
 // Pagina contacto
 router.put('/contacto',paginaContacto.editarContacto);
 router.get('/contacto',paginaContacto.obtenerContactos);
+router.post('/contacto/correo',paginaContacto.enviarContacto);
 
 // Pagina Terminos y condiciones
 router.put('/terminos',paginaContacto.editarTerminos);
@@ -71,5 +70,15 @@ router.get('/terminos',paginaContacto.obtenerTerminos);
 // Pagina Aviso de privacidad
 router.put('/privacidad',paginaContacto.editarPrivacidad);
 router.get('/privacidad',paginaContacto.obtenerPrivacidad);
+
+// Fondos
+router.put('/fondos',multer.fields([
+  { name: 'imagen1', maxCount: 1 }, 
+  { name: 'imagen2', maxCount: 1 }, 
+  { name: 'imagen3', maxCount:1 },
+  { name: 'footer1', maxCount:1 },
+  { name: 'footer2', maxCount:1 }
+]),fondosController.editarFondos);
+router.get('/fondos',fondosController.obtenerFondos);
 
 module.exports = router;

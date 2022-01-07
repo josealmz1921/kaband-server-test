@@ -84,52 +84,47 @@ exports.descontarStockOnline = async (productos) => {
         await productos.map( async producto => {
             
 
+            let cantidad = producto.cantidad;
             const productoColor = producto.vinculados.find(item => item.color === producto.color);
 
             const productoFind = await Productos.findById({_id:productoColor.id});
-            const almacenDesc = productoFind.almacenes.filter(almacen => almacen.id === 0);
-            console.log(productoFind);
-            const nuevaCantidadAlmacen = Number(almacenDesc[0].cantidad) - producto.cantidad;
-            const almacenesProducto = productoFind.almacenes;
 
-            let nuevoMovimiento = {};
-            let almacenesList = almacenesProducto.map(almacen => {
-                let datos = {};
-                if(almacen.id == 0){
-                    datos.almacen = 0;
-                    datos.despues = parseInt(nuevaCantidadAlmacen);
-                    datos.antes = parseInt(almacen.cantidad);
-                    datos.tipo = 'vendido';
-                }else{
-                    datos.almacen = almacen.id;
-                    datos.despues = parseInt(almacen.cantidad);
-                    datos.antes = parseInt(almacen.cantidad);
-                    datos.tipo = 'vendido';
-                }
-                    
-                return datos;
-            })
-            
-
-            nuevoMovimiento.almacenes = almacenesList;
-            nuevoMovimiento.producto = productoFind.nombre;
-            nuevoMovimiento.productoId = productoColor.id;
-            nuevoMovimiento.usuario = null;
-            const movimiento = new Movimientos(nuevoMovimiento);
-            await movimiento.save();
-
-            const nuevosAlmacenes = productoFind.almacenes.map( almacen => {
-                if(almacen.id === 0){
-                    almacen.cantidad = nuevaCantidadAlmacen;
-                }
-                return almacen;
+            const ordenandoArray = productoFind.almacenes.sort(function (a, b){
+                return  Number(b.cantidad) - Number(a.cantidad) ;
             });
+            
+            const nuevosAlmacenes = ordenandoArray.map(almacen => {
 
-            console.log(nuevosAlmacenes,nuevaCantidadAlmacen);
+                let stockNuevo = almacen.cantidad
+                
+                if(almacen.cantidad >= cantidad){
+                    stockNuevo = almacen.cantidad - cantidad;
+                    cantidad = 0;
+                }else{
+                    if(almacen.cantidad < cantidad){
+                        stockNuevo = cantidad - almacen.cantidad ;
+                        cantidad = cantidad - almacen.cantidad ;
+                    }
+                }
 
+                almacen.cantidad = Number(stockNuevo);
+                
+                return almacen
+                
+            })
+
+            let ordenandoArrayMenor = [];
+
+            const validacion1 = nuevosAlmacenes.find(item => item.nombre === 'U-storahe');
+            ordenandoArrayMenor.push(validacion1);
+            const validacion2 = nuevosAlmacenes.find(item => item.nombre === 'ShowRoom');
+            ordenandoArrayMenor.push(validacion2);
+            const validacion3 = nuevosAlmacenes.find(item => item.nombre === 'Bodega');
+            ordenandoArrayMenor.push(validacion3);
+            
             await Productos.findByIdAndUpdate({_id:productoColor.id},{
                 $set:{
-                    almacenes:nuevosAlmacenes
+                    almacenes:ordenandoArrayMenor
                 }
             })
 

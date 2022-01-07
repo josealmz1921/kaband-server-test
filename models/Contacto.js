@@ -27,6 +27,12 @@ const ContactoSchema = mongoose.Schema({
     },
     instagram:{
         type:String
+    },
+    copy:{
+        type:String
+    },
+    nosotrosCorto:{
+        type:String
     }
 })
 

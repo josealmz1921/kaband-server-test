@@ -6,7 +6,7 @@ const { sendMailContacto } = require('../functions/sendEmail')
 exports.editarContacto = async (req,res) => {
     try {
         
-        const { nosotros,whatsapp,telefono,email,direccion,horarios,facebook,instagram,youtube } = req.body;
+        const { nosotros,whatsapp,telefono,email,direccion,horarios,facebook,instagram,youtube,copy,nosotrosCorto } = req.body;
 
         let nuevosContactos = {};
         nuevosContactos.nosotros = nosotros;
@@ -18,6 +18,9 @@ exports.editarContacto = async (req,res) => {
         nuevosContactos.facebook = facebook;
         nuevosContactos.instagram = instagram;
         nuevosContactos.youtube = youtube;
+        nuevosContactos.copy = copy;
+        nuevosContactos.nosotrosCorto = nosotrosCorto;
+
         const contacto = await Contacto.findByIdAndUpdate({_id:'61a6315dab5aa8958a4eecc0'},nuevosContactos,{new:true})
         res.json({contacto});
 
