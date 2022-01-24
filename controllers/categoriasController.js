@@ -2,6 +2,7 @@ const Categorias = require('../models/Categorias');
 const Productos = require('../models/Productos');
 const {subirImagen} = require('../functions/subirImagen');
 const {eliminarImagen} = require('../functions/eliminarImagen');
+const { findById } = require('../models/Productos');
 
 exports.crearCategoria = async (req,res) => {
 
@@ -206,7 +207,6 @@ exports.obtenerCategoriasPaginaHijos = async (req,res) => {
         const categoriasTotal = await Promise.all(
             resultado.map( async item => {
 
-                let cantidad = 0;
                 const set = JSON.parse(JSON.stringify(item));
                 set.cantidad = await Productos.find({categoria:item._id,principal:true}).count();
                 if(set.padre === null) return null;
@@ -215,8 +215,31 @@ exports.obtenerCategoriasPaginaHijos = async (req,res) => {
             })
         )
 
-        const categorias = categoriasTotal.filter( item => item !== null );
+        let categorias = categoriasTotal.filter( item => item !== null );
+
+        if(categorias.length > 0){
+            return res.json({categorias});
+        }
+
+        const categoriaSelect = await Categorias.findById({_id:req.params.id});
+
+        const hermanos = await Categorias.find({padre:categoriaSelect.padre});
+        
+        const categoriasHermanos = await Promise.all(
+            hermanos.map( async item => {
+
+                const set = JSON.parse(JSON.stringify(item));
+                set.cantidad = await Productos.find({categoria:item._id,principal:true}).count();
+                if(set.padre === null) return null;
+                return set;
+
+            })
+        )
+
+        categorias = categoriasHermanos.filter( item => item !== null );
+
         return res.json({categorias});
+        
         
     } catch (error) {
         console.log(error);

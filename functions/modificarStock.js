@@ -85,7 +85,7 @@ exports.descontarStockOnline = async (productos) => {
             
 
             let cantidad = producto.cantidad;
-            const productoColor = producto.vinculados.find(item => item.color === producto.color);
+            const productoColor = producto.vinculados.find(item => item.color.toString() === producto.color.toString());
 
             const productoFind = await Productos.findById({_id:productoColor.id});
 

@@ -20,7 +20,7 @@ exports.remision = async (req,res) => {
 exports.crearCotizacion = async (req,res) => {
     try {
 
-        const {cliente,divisa,descuento,data,comentarios,vendedor} = req.body;
+        const {cliente,divisa,descuento,data,comentarios,vendedor,envio} = req.body;
 
         const subtotal = data.reduce((acc,item) => (item.precioVenta * item.cantidadVenta) + acc , 0);
         const descuentoTotal = data.reduce((acc,item) => (((item.precioVenta * item.cantidadVenta) * item.descuento) / 100) + acc , 0);
@@ -37,6 +37,7 @@ exports.crearCotizacion = async (req,res) => {
         nuevaCotizacion.descuento = descuento;
         nuevaCotizacion.comentarios = comentarios;
         nuevaCotizacion.vendedor = vendedor;
+        nuevaCotizacion.envio = envio;
 
         const cotizacion = new Cotizaciones(nuevaCotizacion);
         await cotizacion.save();
@@ -54,7 +55,7 @@ exports.crearCotizacion = async (req,res) => {
 exports.editarCotizacion = async (req,res) => {
     try {
 
-        const {cliente,divisa,descuento,data,comentarios,_id} = req.body;
+        const {cliente,divisa,descuento,data,comentarios,_id,envio} = req.body;
 
         const subtotal = data.reduce((acc,item) => (item.precioVenta * item.cantidadVenta) + acc , 0);
         const descuentoTotal = data.reduce((acc,item) => (((item.precioVenta * item.cantidadVenta) * item.descuento) / 100) + acc , 0);
@@ -67,6 +68,7 @@ exports.editarCotizacion = async (req,res) => {
         nuevaCotizacion.divisa = divisa;
         nuevaCotizacion.descuento = descuento;
         nuevaCotizacion.comentarios = comentarios;
+        nuevaCotizacion.envio = envio;
 
         const cotizacion = await Cotizaciones.findByIdAndUpdate({_id},nuevaCotizacion,{new:true});
 

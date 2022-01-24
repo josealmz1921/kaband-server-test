@@ -34,6 +34,8 @@ app.use('/api/reportes',require('./routes/reportes'));
 app.use('/api/paginas',require('./routes/paginas'));
 app.use('/api/carrito',require('./routes/carrito'));
 app.use('/api/inventarios',require('./routes/inventarios'));
+app.use('/api/sectores',require('./routes/sectores'));
+app.use('/api/metodos',require('./routes/metosPago'));
 
 // arrancar app
 app.listen(PORT, () => {

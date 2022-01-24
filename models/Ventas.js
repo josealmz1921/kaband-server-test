@@ -36,6 +36,9 @@ const VentasSchema = mongoose.Schema({
         type:Date,
         default:Date.now()
     },
+    envio:{
+        type:Number
+    }
 })
 
 module.exports = mongoose.model('Ventas',VentasSchema);

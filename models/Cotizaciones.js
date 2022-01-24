@@ -35,6 +35,9 @@ const CotizacionesSchema = mongoose.Schema({
         type:Date,
         default:Date.now()
     },
+    envio:{
+        type:Number
+    }
 })
 
 module.exports = mongoose.model('Cotizaciones',CotizacionesSchema);

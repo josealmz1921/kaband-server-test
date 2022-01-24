@@ -44,7 +44,7 @@ exports.modificarSeccionDetalles = async (req,res) => {
         seccion.categoria3 = categoria3;
         seccion.categoria4 = categoria4;
         seccion.categoria5 = categoria5;
-        seccion.categoria5 = categoria6;
+        seccion.categoria6 = categoria6;
 
 
         if(req.files['imagen1']){

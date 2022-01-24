@@ -7,10 +7,10 @@ const { descontarStock,devolverStock,guardarDatosReporte,validarStock } = requir
 exports.crearVenta = async (req,res) => {
     try {
 
-        const {cliente,formaPago,divisa,estatus,descuento,vendedor,data} = req.body;
+        const {cliente,formaPago,divisa,estatus,descuento,vendedor,data,envio} = req.body;
 
-        const subtotal = data.reduce((acc,item) => (item.precioVenta * item.cantidadVenta) + acc , 0);
-        const descuentoTotal = data.reduce((acc,item) => (((item.precioVenta * item.cantidadVenta) * item.descuento) / 100) + acc , 0);
+        const subtotal = data.reduce((acc,item) => (item.precioVenta * Number(item.cantidadVenta)) + acc , 0);
+        const descuentoTotal = data.reduce((acc,item) => (((item.precioVenta * Number(item.cantidadVenta)) * item.descuento) / 100) + acc , 0);
         const total = subtotal - descuentoTotal;
 
         const ultimo = await Ventas.find().sort({$natural:-1}).limit(1);
@@ -35,6 +35,7 @@ exports.crearVenta = async (req,res) => {
         nuevaVenta.divisa = divisa;
         nuevaVenta.descuento = descuento;
         nuevaVenta.vendedor = vendedor;
+        nuevaVenta.envio = envio;
 
         const venta = new Ventas(nuevaVenta);
         await venta.save();
