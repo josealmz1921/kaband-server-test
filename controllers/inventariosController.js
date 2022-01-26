@@ -13,20 +13,19 @@ exports.leerExcel = async (req,res) => {
                     let cant = Number(item[almacen.nombre]);
                     if (isNaN(cant)) {
                         cant = almacen.cantidad
-                      }
+                    }
                     almacen.cantidad = cant;
                     return almacen;
                 })
 
-                await Productos.findByIdAndUpdate({_id:item.id},
+                const result = await Productos.findByIdAndUpdate({_id:item.id},
                 {$set:{
                     nombre:item.Nombre,
                     sku:item.Sku,
                     precio:Number(item['Precio Compra']),
                     precioVenta:Number(item['Precio Venta']),
                     almacenes:almacen
-                }}) 
-
+                }});
                 
             })
         )

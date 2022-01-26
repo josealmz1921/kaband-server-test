@@ -16,12 +16,14 @@ exports.crearProducto = async (req,res) => {
             let nuevoAlmacen = {};
             nuevoAlmacen.id = almacen._id;
             nuevoAlmacen.cantidad = 0;
+            nuevoAlmacen.nombre = almacen.nombre;
             return nuevoAlmacen
         })
         
         listadoAlamacenes.push({
             id:0,
-            cantidad:0
+            cantidad:0,
+            nombre:'Bodega'
         })
 
         nuevoProducto.nombre = nombre;
@@ -121,8 +123,6 @@ exports.editarStock = async (req,res) => {
         return res.json({producto});
     } catch (error) {
         
-        console.log(error);
-
         return res.status(400).json({msg:'Ha ocurrido un error al editar el producto'});
 
     }
