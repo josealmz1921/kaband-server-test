@@ -215,6 +215,7 @@ exports.guardarDatosReporte = async (productos,vendedor,cliente,total,formaPago,
             nuevoReporte.precio = total;
             nuevoReporte.descuento = producto.descuento;
             nuevoReporte.cantidad = producto.cantidadVenta;
+            nuevoReporte.precioProducto =  (producto.precioVenta - ((producto.descuento * producto.precioVenta) / 100));
         
             const reporte = new Reportes(nuevoReporte);
 

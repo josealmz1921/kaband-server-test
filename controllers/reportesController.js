@@ -143,7 +143,7 @@ exports.reporteProductos = async (req,res) => {
             report.map(value => {
 
                 data.ventas = value.cantidad + data.ventas; 
-                data.ganancias = (value.precio * value.cantidad) + data.ganancias; 
+                data.ganancias = (value.precioProducto * value.cantidad) + data.ganancias; 
                 data.producto = value.concepto; 
                 
             })

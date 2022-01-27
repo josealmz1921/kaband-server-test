@@ -25,6 +25,9 @@ const ReportesSchema = mongoose.Schema({
     precio:{
         type:Number
     },
+    precioProducto:{
+        type:Number
+    },
     cantidad:{
         type:Number
     },
