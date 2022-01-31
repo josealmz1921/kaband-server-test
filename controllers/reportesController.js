@@ -16,7 +16,8 @@ exports.reporteInicio = async (req,res) => {
         let fecha = new Date(Date.now());
         let fechaInicio = new Date(`${fecha.getUTCFullYear()}/${fecha.getMonth()+1}/01`);
         let fechaFin = new Date (fecha.getFullYear(),fecha.getMonth()+1, 0);
-
+        fechaFin = new Date(fechaFin.setHours(23, 59, 59))
+        
         let query = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }}]};
         let query1 = { "$and": [{ status : 'Pagada'}]};
         let query2 = { "$and": [{ status : 'Cancelada'}]};
@@ -121,14 +122,17 @@ exports.reporteProductos = async (req,res) => {
         let fecha = new Date(Date.now());
         let fechaInicio = new Date(`${fecha.getUTCFullYear()}/${fecha.getMonth()+1}/01`);
         let fechaFin = new Date (fecha.getFullYear(),fecha.getMonth()+1, 0);
+        fechaFin = new Date(fechaFin.setHours(23, 59, 59))
 
         if(options.inicio && options.fin){
             fechaInicio = new Date(options.inicio);
             fechaFin = new Date (options.fin);
+            fechaFin = new Date(fecha.getFullYear(),fecha.getMonth(),fechaFin.getDate()+1);
+            fechaFin.setDate(fechaFin.getDate() + 1);
         }
 
         let query = { "$and": [{fechaPago: { $gte: fechaInicio }}, {fechaPago:{ $lte: fechaFin }}]}
-
+        
         const productos = await Reportes.find(query);
         const reportesProductosAgrupodos = groupBy(productos,'producto');
 
@@ -409,18 +413,20 @@ exports.reporteExcelVendedores = async (req,res) => {
                             tempData.push(valores);
                         })
 
-                }))
-                
+                }))                
 
                 data.push(tempData);
                 
             })
         )
 
+        let fila = 1;
+
         data.map((vals) => {
-            vals.map((valores,index) =>{
+            vals.map((valores) =>{
+                fila = fila + 1;
                 Object.values(valores).map( async (val,i) => {
-                    ws.cell(index+2,i+1)
+                    ws.cell(fila,i+1)
                     .string(val.toString())
                     .style(styleCell);
                 })
