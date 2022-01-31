@@ -6,7 +6,6 @@ const Productos = require('../models/Productos');
 const Ventas = require('../models/Ventas');
 const Categorias = require('../models/Categorias');
 const xl = require('excel4node');
-const Cotizaciones = require('../models/Cotizaciones');
 
 exports.reporteInicio = async (req,res) => {
     try {
@@ -33,7 +32,7 @@ exports.reporteInicio = async (req,res) => {
         }
         
 
-        const resultados = await Cotizaciones.find(query4).limit(10).sort({fecha: -1});
+        const resultados = await Ventas.find(query4).limit(10).sort({fecha: -1});
 
         const cotizaciones = await Promise.all(
             resultados.map(async result => {
@@ -292,6 +291,8 @@ exports.exportarProdutos = async (req,res) => {
 
 exports.reporteExcelVendedores = async (req,res) => {
 
+    
+
     const titulos = [
         'Factura',
         '# Remision',
@@ -316,7 +317,7 @@ exports.reporteExcelVendedores = async (req,res) => {
         const wb = new xl.Workbook();
         var ws = wb.addWorksheet('Reporte vendedores');
 
-        const productos = await Reportes.find();
+        const productos = await Reportes.find({vendedor:req.params.id});
 
         // Create a reusable style
         var style = wb.createStyle({
