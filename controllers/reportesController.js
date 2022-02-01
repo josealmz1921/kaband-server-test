@@ -17,7 +17,7 @@ exports.reporteInicio = async (req,res) => {
         let fechaFin = new Date (fecha.getFullYear(),fecha.getMonth()+1, 0);
         fechaFin = new Date(fechaFin.setHours(23, 59, 59))
         
-        let query = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }}]};
+        let query = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Pagada'}]};
         let query1 = { "$and": [{ status : 'Pagada'}]};
         let query2 = { "$and": [{ status : 'Cancelada'}]};
         let query3 = { "$and": [{ status : 'Pendiente'}]};
@@ -97,6 +97,8 @@ exports.reporteInicio = async (req,res) => {
         ])
 
         let totales = {};
+
+        console.log(total);
 
         totales.cancelado = totalCancelado.length > 0 ? totalCancelado[0].total : 0;
         totales.pagado = totalPagado.length > 0 ? totalPagado[0].total : 0;
