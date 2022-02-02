@@ -6,33 +6,29 @@ const Productos = require('../models/Productos');
 const Ventas = require('../models/Ventas');
 const Categorias = require('../models/Categorias');
 const xl = require('excel4node');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.reporteInicio = async (req,res) => {
     try {
+        
 
         const { rol,_id } = req.params;
+
+        console.log(_id);
 
         let fecha = new Date(Date.now());
         let fechaInicio = new Date(`${fecha.getUTCFullYear()}/${fecha.getMonth()+1}/01`);
         let fechaFin = new Date (fecha.getFullYear(),fecha.getMonth()+1, 0);
         fechaFin = new Date(fechaFin.setHours(23, 59, 59))
         
-        let query = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Pagada'}]};
-        let query1 = { "$and": [{ status : 'Pagada'}]};
-        let query2 = { "$and": [{ status : 'Cancelada'}]};
-        let query3 = { "$and": [{ status : 'Pendiente'}]};
-        let query4 = { };
+        let query = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Pagada'},{vendedor:ObjectId(_id)}]};
+        let query1 = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Pagada'},{vendedor:ObjectId(_id)}]};
+        let query2 = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Cancelada'},{vendedor:ObjectId(_id)}]};
+        let query3 = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{ status : 'Pendiente'},{vendedor:ObjectId(_id)}]};
+        let query4 = { "$and": [{fecha: { $gte: fechaInicio }}, {fecha:{ $lte: fechaFin }},{vendedor:ObjectId(_id)}]};
 
-        if(rol !== 'Administrador' && rol !== 'Gerente'){
-            query["$and"].push({vendedor:_id});
-            query1["$and"].push({vendedor:_id});
-            query2["$and"].push({vendedor:_id});
-            query3["$and"].push({vendedor:_id});
-            query4 = {"$and": [{vendedor:_id}]};
-        }
-        
-
-        const resultados = await Ventas.find(query4).limit(10).sort({fecha: -1});
+        const resultados = await Ventas.find(query4).sort({fecha: -1});
 
         const cotizaciones = await Promise.all(
             resultados.map(async result => {
@@ -72,6 +68,9 @@ exports.reporteInicio = async (req,res) => {
             }}
         ])
 
+        console.log(total);
+        
+
         const totalPagado = await Ventas.aggregate([
             {$match: query1},
             {$group:{
@@ -97,8 +96,6 @@ exports.reporteInicio = async (req,res) => {
         ])
 
         let totales = {};
-
-        console.log(total);
 
         totales.cancelado = totalCancelado.length > 0 ? totalCancelado[0].total : 0;
         totales.pagado = totalPagado.length > 0 ? totalPagado[0].total : 0;
