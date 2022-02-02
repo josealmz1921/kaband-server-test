@@ -11,7 +11,7 @@ exports.crearVenta = async (req,res) => {
 
         const subtotal = data.reduce((acc,item) => (item.precioVenta * Number(item.cantidadVenta)) + acc , 0);
         const descuentoTotal = data.reduce((acc,item) => (((item.precioVenta * Number(item.cantidadVenta)) * item.descuento) / 100) + acc , 0);
-        const total = subtotal - descuentoTotal;
+        const total = (subtotal - descuentoTotal) * 1.16;
 
         const ultimo = await Ventas.find().sort({$natural:-1}).limit(1);
 
