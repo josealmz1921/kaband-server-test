@@ -58,6 +58,25 @@ exports.editarProducto = async (req,res) => {
     try {
         const { nombre,sku,precio,precioVenta,descripcionProducto,categoria,peso,specs,largo,ancho,alto,colores,_id,accesorios,descripcionCorta } = req.body;
 
+        const productoActual = await Productos.findById({_id}); 
+
+        let vinculados = productoActual.vinculados;
+        let coloresImagenes = productoActual.imagenesColores;
+
+        let coloresImagenesNuevo = [];
+        let coloresVinculados = [];
+
+        colores.forEach(value => {
+            const color = value.toString();
+           
+            const buscarColorVinculado = vinculados.find(value => value.color.toString() === color);
+            if(buscarColorVinculado) coloresVinculados = [...coloresVinculados,buscarColorVinculado];
+
+            const buscarColoresImagenes = coloresImagenes.find(value => value.color === color);
+            if(buscarColoresImagenes) coloresImagenesNuevo = [...coloresImagenesNuevo,buscarColoresImagenes];
+
+        });
+
         let nuevoProducto = {};
         nuevoProducto.nombre = nombre;
         nuevoProducto.sku = sku;
@@ -73,6 +92,8 @@ exports.editarProducto = async (req,res) => {
         nuevoProducto.specs = specs;    
         nuevoProducto.accesorios = accesorios;
         nuevoProducto.descripcionCorta = descripcionCorta;
+        nuevoProducto.vinculados = coloresVinculados;
+        nuevoProducto.imagenesColores = coloresImagenesNuevo;
 
         const producto = await Productos.findByIdAndUpdate({_id},nuevoProducto,{new:true});
 
@@ -247,6 +268,12 @@ exports.obtenerProductos = async (req,res) => {
         const resultados = await Productos.find(query).limit(cantidad).skip(skip);
         const total = await Productos.find(query).count();
 
+        resultados.sort((a, b) => {            
+            if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+            if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+            return 0;
+        })
+
         const productos = await Promise.all(
             resultados.map(async result => {
 
@@ -326,6 +353,16 @@ exports.obtenerProducto = async (req,res) => {
         
         const producto = await Productos.findById({_id: req.params._id});
         const categoria = await Categorias.findById({_id:producto.categoria});
+
+        const accesorios = await Promise.all(
+            producto.accesorios.map( async item => {
+                let data = {};
+                const prod = await Productos.findById({_id:item._id});
+                return prod;
+            })
+        )
+
+        producto.accesorios = accesorios;
         
         const stock = await Promise.all(
             producto.vinculados.map( async item => {
@@ -340,6 +377,7 @@ exports.obtenerProducto = async (req,res) => {
         return res.json({producto,categoria,stock});
 
     } catch (error) {
+        console.log(error);
         return res.status(400).json({msg:'Error al obtener el producto'});
     }
 }
@@ -469,10 +507,15 @@ exports.editarImagenes = async (req,res) => {
 }
 
 exports.eliminarImagenes = async (req,res) => {
+
     try {
+
+        const producto = await Productos.findById({_id:req.body._id});
+        const nuevosColoresVinculados = producto.imagenesColores.filter(img => img.imagen !== req.body.imagen);
 
         let nuevoProducto = {};
         nuevoProducto.imagenes = req.body.listado;
+        nuevoProducto.imagenesColores = nuevosColoresVinculados;
         await Productos.findByIdAndUpdate({_id:req.body._id},nuevoProducto,{new:true});
         await eliminarImagen(req.body.imagen);
         res.json({msg:'Imagen eliminada'})
