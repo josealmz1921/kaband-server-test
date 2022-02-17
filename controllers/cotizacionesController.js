@@ -114,7 +114,15 @@ exports.obtenerCotizaciones = async (req,res) => {
         }
 
         const skip = (page - 1) * 25;
-        const resultados = await Cotizaciones.find(query).limit(25).skip(skip);
+        let resultados = await Cotizaciones.find(query).limit(25).skip(skip);
+
+        
+        resultados.sort(function(a, b) {
+            return  Number(b.nota) - Number(a.nota);
+        });
+
+        console.log();
+
         const total = await Cotizaciones.find(query).count();
 
         const cotizaciones = await Promise.all(
