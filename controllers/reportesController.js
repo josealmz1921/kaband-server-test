@@ -15,8 +15,6 @@ exports.reporteInicio = async (req,res) => {
 
         const { rol,_id } = req.params;
 
-        console.log(_id);
-
         let fecha = new Date(Date.now());
         let fechaInicio = new Date(`${fecha.getUTCFullYear()}/${fecha.getMonth()+1}/01`);
         let fechaFin = new Date (fecha.getFullYear(),fecha.getMonth()+1, 0);
@@ -66,10 +64,7 @@ exports.reporteInicio = async (req,res) => {
                 _id : '',
                 total:{ $sum: "$total" }
             }}
-        ])
-
-        console.log(total);
-        
+        ])        
 
         const totalPagado = await Ventas.aggregate([
             {$match: query1},
@@ -316,6 +311,8 @@ exports.reporteExcelVendedores = async (req,res) => {
         const wb = new xl.Workbook();
         var ws = wb.addWorksheet('Reporte vendedores');
 
+        const cliente = await Usuarios.findById({_id:req.params.id}).populate('rol');
+        
         const productos = await Reportes.find({vendedor:req.params.id});
 
         // Create a reusable style
@@ -380,7 +377,6 @@ exports.reporteExcelVendedores = async (req,res) => {
         await Promise.all( Object.values(agrupodos).map( async (value) => {
 
                 const usuario = await Usuarios.findById({_id:value[0].vendedor});
-                const cliente = await Clientes.findById({_id:value[0].cliente});
 
                 if(!cliente || !usuario) return null
 
@@ -388,6 +384,8 @@ exports.reporteExcelVendedores = async (req,res) => {
                 let tempData = [];
 
                 await Promise.all( Object.values(agrupadosVentas).map(async (val) => {
+
+                    const cliente = await Clientes.findById({_id:val[0].cliente});
 
                         Object.values(val).map((item,index) => {
 
